@@ -1,6 +1,6 @@
 package com.example.webProgramming;
 
-
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,19 +8,23 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller // Mustache를 위한 컨트롤러 클래스
-@RequestMapping("/users") // 기본 URL 경로 설정
+@Controller
+@RequestMapping("/users")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
+    // google.maps.api.key를 application.properties에서 읽어오기
+    @Value("${google.maps.api.key}")
+    private String googleMapsApiKey;
+
     // 모든 유저 조회 화면
     @GetMapping
     public String listUsers(Model model) {
         List<User> users = userService.getAllUsers();
-        model.addAttribute("users", users); // 모델에 데이터 추가
-        return "user-list"; // Mustache 템플릿 이름
+        model.addAttribute("users", users);
+        return "user-list";
     }
 
     // 새 유저 추가 화면
@@ -31,10 +35,10 @@ public class UserController {
         user.setEmail("");
         user.setPhone("");
         user.setAddress("");
-        model.addAttribute("user", user); // 모델에 추가
+        model.addAttribute("user", user);
+        model.addAttribute("googleMapsApiKey", googleMapsApiKey); // 구글 맵 API 키 전달
         return "user-form";
     }
-
 
     // 유저 저장 처리
     @PostMapping
@@ -48,6 +52,7 @@ public class UserController {
     public String editUserForm(@PathVariable Long id, Model model) {
         User user = userService.getUserById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user ID: " + id));
         model.addAttribute("user", user);
+        model.addAttribute("googleMapsApiKey", googleMapsApiKey); // 구글 맵 API 키 전달
         return "user-form";
     }
 
@@ -58,4 +63,3 @@ public class UserController {
         return "redirect:/users";
     }
 }
-
