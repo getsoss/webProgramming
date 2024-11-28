@@ -24,4 +24,6 @@ public class    User {
     private String email;
 
     private String phone; // 전화번호는 필수가 아님
+
+    private String address; // 전화번호는 필수가 아님
 }

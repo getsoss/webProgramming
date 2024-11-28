@@ -30,6 +30,7 @@ public class UserController {
         user.setName("");       // 기본값 설정
         user.setEmail("");
         user.setPhone("");
+        user.setAddress("");
         model.addAttribute("user", user); // 모델에 추가
         return "user-form";
     }

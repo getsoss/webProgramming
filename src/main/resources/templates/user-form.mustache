@@ -3,30 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <title>User Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-<h1>User Form</h1>
-<form action="/users" method="post">
-    <!-- ID가 있는 경우 hidden 필드 추가 -->
-    {{#id}}
-        <input type="hidden" name="id" value="{{id}}">
-    {{/id}}
+<body class="bg-gray-100 text-gray-900">
 
-    <label for="name">Name:</label>
-    <input type="text" id="name" name="name" value="{{#name}}{{name}}{{/name}}">
-    <br>
+<div class="max-w-4xl mx-auto py-8 px-4 sm:px-6 md:px-8">
+    <h1 class="text-3xl font-semibold mb-6 text-center">User Form</h1>
 
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" value="{{#email}}{{email}}{{/email}}">
-    <br>
+    <form action="/users" method="post" class="bg-white p-8 rounded-lg shadow-md">
 
-    <label for="phone">Phone:</label>
-    <input type="text" id="phone" name="phone" value="{{#phone}}{{phone}}{{/phone}}">
-    <br>
+        <!-- ID가 있는 경우 hidden 필드 추가 -->
+        {{#id}}
+            <input type="hidden" name="id" value="{{id}}">
+        {{/id}}
 
-    <button type="submit">Save</button>
-</form>
+        <div class="mb-4">
+            <label for="name" class="block text-sm font-medium text-gray-600">Name:</label>
+            <input type="text" id="name" name="name" value="{{#name}}{{name}}{{/name}}"
+                   class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+        </div>
 
+        <div class="mb-4">
+            <label for="email" class="block text-sm font-medium text-gray-600">Email:</label>
+            <input type="email" id="email" name="email" value="{{#email}}{{email}}{{/email}}"
+                   class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+        </div>
 
+        <div class="mb-4">
+            <label for="phone" class="block text-sm font-medium text-gray-600">Phone:</label>
+            <input type="text" id="phone" name="phone" value="{{#phone}}{{phone}}{{/phone}}"
+                   class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+        </div>
+
+        <!-- Address 입력 필드 추가 -->
+        <div class="mb-4">
+            <label for="address" class="block text-sm font-medium text-gray-600">Address:</label>
+            <input type="text" id="address" name="address"
+                   class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                   placeholder="Enter address" autocomplete="off">
+        </div>
+
+        <button type="submit"
+                class="w-full py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors mt-4">
+            Save
+        </button>
+    </form>
+</div>
+
+<!-- 구글 맵 API 로드 (자동완성 기능을 위한 API 키 포함) -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwc2OTKdRIff0dY0eB640xRV_6DGTUcWY&libraries=places&callback=initAutocomplete" async defer></script>
+
+<script>
+    function initAutocomplete() {
+        const addressInput = document.getElementById('address');
+
+        const autocomplete = new google.maps.places.Autocomplete(addressInput);
+
+        autocomplete.addListener('place_changed', function() {
+            const place = autocomplete.getPlace();
+
+            if (!place.geometry) {
+                console.log("No details available for the selected place.");
+                return;
+            }
+
+            console.log('Address:', place.formatted_address);
+            console.log('Latitude:', place.geometry.location.lat());
+            console.log('Longitude:', place.geometry.location.lng());
+        });
+    }
+</script>
 </body>
 </html>
